@@ -6,8 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 
-import { Button } from 'react-native';
-import BluetoothSerial from 'react-native-bluetooth-serial';
+import { Button, PermissionsAndroid } from 'react-native';
+import RNBluetoothClassic, {
+  BluetoothDevice
+} from 'react-native-bluetooth-classic';
+
 import React, { useState, useEffect } from 'react';
 
 
@@ -19,15 +22,45 @@ export interface BemvindoScreenProps {
 export  function Pagina1 (props: any) {
 
   const navigation = useNavigation<any>();
-
-  {/*
-  const [deviceAddress, setDeviceAddress] = useState<string>('00:21:13:03:1B:4A'); // Substitua pelo endereço do dispositivo que você deseja verificar
+  const [deviceAddress, setDeviceAddress] = useState<string>('60:A5:E2:EB:C2:0F'); // Substitua pelo endereço do dispositivo que você deseja verificar
   const [isConnected, setIsConnected] = useState<boolean>(false);
-
+  
   const checkDeviceConnection = async () => {
     try {
-      const connected: boolean = await BluetoothSerial.isConnected(deviceAddress);
-      setIsConnected(connected);
+      console.log('AAAA');
+      //Solicita permissão
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
+        {
+          title: 'Liberar acesso ao bluetooth',
+          message:
+            'Será usado para buscar os dados do dispositivo',
+          buttonNeutral: 'Perguntar depois',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'OK',
+        },
+      );
+      //Permissão liberada
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+        //Busca os dispositivos conectados
+        const connected = await RNBluetoothClassic.getBondedDevices();
+        connected.forEach(async device => {
+          //conecta com o aplicativo
+          if (device.address == deviceAddress)
+            await device.connect();
+          
+          console.log(device.address);
+          console.log(device.name)
+          const conectado = await device.isConnected();
+          if (conectado) {
+            //REALIZAR AQUI A RECUPERAÇÃO DOS DADOS ENVIADO PELO DISPOTIVO!!!
+            device.onDataReceived(data => {
+              console.log(data)
+            })
+          }
+        })
+      }
     } catch (error) {
       console.error('Erro ao verificar a conexão Bluetooth:', error);
     }
@@ -37,7 +70,7 @@ export  function Pagina1 (props: any) {
     // Chama a função de verificação ao montar o componente
     checkDeviceConnection();
   }, [deviceAddress]);
-*/}
+
   
   return (
     <>
