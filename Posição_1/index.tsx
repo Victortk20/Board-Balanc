@@ -10,10 +10,11 @@ export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "bemvindo">
 }
 
-export function Pagina1 (props: any) {
+
+export  function Pagina1 (props: any) {
 
   const navigation = useNavigation<any>();
-
+  
   return (
     <>
     <View style={styles.container}>
@@ -29,7 +30,6 @@ export function Pagina1 (props: any) {
         <Text style={styles.textobotao}>Voltar</Text>
     </TouchableOpacity>
     </View>
-    
     </>
     
   );

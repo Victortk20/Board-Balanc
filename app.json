@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.victor.projeto"
     },
     "android": {
       "adaptiveIcon": {
@@ -47,6 +48,11 @@
           ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d6617e09-ee2b-495a-87b7-f68db6142c95"
+      }
+    }
   }
 }
