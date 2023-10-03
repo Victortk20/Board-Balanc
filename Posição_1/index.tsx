@@ -6,6 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 
+import { Button } from 'react-native';
+import BluetoothSerial from 'react-native-bluetooth-serial';
+import React, { useState, useEffect } from 'react';
+
+
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "bemvindo">
 }
@@ -14,6 +19,25 @@ export interface BemvindoScreenProps {
 export  function Pagina1 (props: any) {
 
   const navigation = useNavigation<any>();
+
+  {/*
+  const [deviceAddress, setDeviceAddress] = useState<string>('00:21:13:03:1B:4A'); // Substitua pelo endereço do dispositivo que você deseja verificar
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  const checkDeviceConnection = async () => {
+    try {
+      const connected: boolean = await BluetoothSerial.isConnected(deviceAddress);
+      setIsConnected(connected);
+    } catch (error) {
+      console.error('Erro ao verificar a conexão Bluetooth:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Chama a função de verificação ao montar o componente
+    checkDeviceConnection();
+  }, [deviceAddress]);
+*/}
   
   return (
     <>
@@ -30,6 +54,19 @@ export  function Pagina1 (props: any) {
         <Text style={styles.textobotao}>Voltar</Text>
     </TouchableOpacity>
     </View>
+
+    {/*
+    <View>
+      <Text>Estado da conexão Bluetooth: {isConnected ? 'Conectado' : 'Desconectado'}</Text>
+      <Button
+        title="Verificar Conexão Bluetooth"
+        onPress={() => {
+          checkDeviceConnection();
+        }}
+      />
+    </View>
+*/}
+
     </>
     
   );
