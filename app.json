@@ -44,7 +44,8 @@
           "alwaysUsageDescription": "Allow myDevice to always use bluetooth info",
           "protocols": [
             "com.myCompany.p1",
-            "com.myCompany.p2"
+            "com.myCompany.p2",
+            "br.com.victor.projeto"
           ]
         }
       ]
