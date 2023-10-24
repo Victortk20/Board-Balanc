@@ -27,6 +27,8 @@ export  function Pagina1 (props: any) {
   const [ x, setX ] = useState<number|null>(null);
   const [ y, setY ] = useState<number|null>(null);
   const [ z, setZ ] = useState<number|null>(null);
+  //INICIAL
+  // const [ inicial, setInicial ] = useState<{x: number, y: number, z: number}|null>();
   
   const deviceAddress = '00:21:13:03:1B:4A'; // Substitua pelo endereço do dispositivo que você deseja verificar
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -52,6 +54,8 @@ export  function Pagina1 (props: any) {
 
 
         let device = await RNBluetoothClassic.connectToDevice(deviceAddress);  // Returns BlutoothDevice
+        let calibrou = false;
+        let inicial = {}
         if (await device.isConnected()) {
           setInterval(async () => {
             let dados:any = await device.read();
@@ -66,14 +70,25 @@ export  function Pagina1 (props: any) {
 
             //Recuperando Y
             const z = dados[1];
+            
+            if (!calibrou) {
+              console.log('Calibar')
+              calibrou = true;
+              console.log(x, y, z);
+              inicial = {x, y, z}
+            } else {
+  
+              console.log('Dados');
+              console.log('- X', inicial['x'] - x);
+              console.log('- Y', inicial['y'] - y);
+              console.log('- Z', inicial['z'] - z);
 
-            console.log('Dados');
-            console.log('- X', x/100);
-            console.log('- Y', y/100);
-            console.log('- Z', z/100);
-            setX(x/100);
-            setY(y/100);
-            setZ(z/100);
+              setX(inicial['x'] - x);
+              setY(inicial['y'] - y);
+              setZ(inicial['z'] - z);
+            }
+
+           
           }, delaySegundos * 1000);
 
         }

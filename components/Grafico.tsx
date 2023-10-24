@@ -9,9 +9,9 @@ const height = 450;
 
 const Grafico = ({points}:{points:any}) => {
   // Defina os valores mínimos e máximos para os eixos X e Y
-  const minX =  0;
+  const minX =  -10;
   const maxX = 10;
-  const minY = 0;
+  const minY = -10;
   const maxY = 10;
 
   // Calcula a escala para que os pontos se encaixem no gráfico

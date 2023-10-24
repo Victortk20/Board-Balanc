@@ -9,7 +9,7 @@ import { Pagina2 } from './../Posição_2';
 import { Pagina3 } from './../Posição_3';
 import { Pagina4 } from './../Posição_4';
 import { Cadastro } from '../cadastro';
-import { listar } from '../Listar';
+import { Listar } from '../Listar';
 
 export type NavegacaoPrincipalParams = {
     bemvindo: undefined,
@@ -33,7 +33,7 @@ export const NavegacaoPrincipal = () => (
             <Stack.Screen name="bemvindo" component={BemvindoScreen} />
             <Stack.Screen name="login" component={LoginScreen} />
             <Stack.Screen name="cadastro" component={Cadastro} />
-            <Stack.Screen name="listar" component={listar} />
+            <Stack.Screen name="listar" component={Listar} />
             <Stack.Screen name="Telaprincipal" component={Telaprincipal} />
             <Stack.Screen name="Pagina1" component={Pagina1} />
             <Stack.Screen name="Pagina2" component={Pagina2} />

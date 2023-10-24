@@ -12,7 +12,7 @@ export interface BemvindoScreenProps {
 }
 
 
-export function listar (props: any) {
+export function Listar (props: any) {
 
  const navigation = useNavigation<any>();
 
