@@ -19,7 +19,6 @@ export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "bemvindo">
 }
 
-
 export  function Pagina1 (props: any) {
 
   const navigation = useNavigation<any>();
@@ -27,6 +26,17 @@ export  function Pagina1 (props: any) {
   const [ x, setX ] = useState<number|null>(null);
   const [ y, setY ] = useState<number|null>(null);
   const [ z, setZ ] = useState<number|null>(null);
+  const [ geradorGrafico, setGeradorGrafico ] = useState<any>(null);
+  const [ executando, setExecutando ] = useState(false);
+
+  //EXEMPLO DO FIRESTORE
+  // addDoc(collection(db, 'exames'), {
+  //  points: points
+  //  paciente: AsyncStorage.getItem('Paciente') 
+  //})
+
+  // AsyncStorage.setItem('Paciente', uuuid);
+
   //INICIAL
   // const [ inicial, setInicial ] = useState<{x: number, y: number, z: number}|null>();
   
@@ -36,6 +46,7 @@ export  function Pagina1 (props: any) {
   
   const checkDeviceConnection = async () => {
     try {
+      setExecutando(true);
       console.log('AAAA');
       //Solicita permissão
       const granted = await PermissionsAndroid.request(
@@ -57,19 +68,19 @@ export  function Pagina1 (props: any) {
         let calibrou = false;
         let inicial = {}
         if (await device.isConnected()) {
-          setInterval(async () => {
+          const interval = setInterval(async () => {
             let dados:any = await device.read();
             //recuperando X
             dados = dados.substring(1);
             dados = dados.split('Y');
-            const x = dados[0];
+            let x = dados[0];
             
             //recuperando Y
             dados = dados[1].split('Z');
-            const y = dados[0];
+            let y = dados[0];
 
             //Recuperando Y
-            const z = dados[1];
+            let z = dados[1];
             
             if (!calibrou) {
               console.log('Calibar')
@@ -78,19 +89,30 @@ export  function Pagina1 (props: any) {
               inicial = {x, y, z}
             } else {
   
+              //ajuste de sensibilidade
+              const sensibilidade = 3;
               console.log('Dados');
-              console.log('- X', inicial['x'] - x);
-              console.log('- Y', inicial['y'] - y);
-              console.log('- Z', inicial['z'] - z);
+              x = (inicial['x'] - x)/sensibilidade;
+              y = (inicial['y'] - y)/sensibilidade;
+              z = (inicial['z'] - y)/sensibilidade;
 
-              setX(inicial['x'] - x);
-              setY(inicial['y'] - y);
-              setZ(inicial['z'] - z);
+              //limites
+              x = Math.min(10, Math.max(-10, x));
+              y = Math.min(10, Math.max(-10, y));
+              z = Math.min(10, Math.max(-10, z));
+             
+              console.log('- X', x);
+              console.log('- Y', y);
+              console.log('- Z', z);
+
+              setX(x);
+              setY(y);
+              setZ(z);
             }
 
            
           }, delaySegundos * 1000);
-
+          setGeradorGrafico(interval);
         }
         
         
@@ -101,7 +123,7 @@ export  function Pagina1 (props: any) {
   };
 
   useEffect(() => {
-    if (y != null) {
+    if (y != null && executando) {
       const newPoints = [...points];
       newPoints.push({x, y});
       console.log(newPoints);
@@ -111,7 +133,7 @@ export  function Pagina1 (props: any) {
 
   useEffect(() => {
     // Chama a função de verificação ao montar o componente
-    checkDeviceConnection();
+    //checkDeviceConnection();
   }, [deviceAddress]);
 
   
@@ -130,6 +152,19 @@ export  function Pagina1 (props: any) {
       <TouchableOpacity style={styles.botao} onPress={() => navigation.goBack()}>
           <Text style={styles.textobotao}>Voltar</Text>
       </TouchableOpacity>
+
+      {!executando && <TouchableOpacity style={styles.botao} onPress={checkDeviceConnection}>
+          <Text style={styles.textobotao}>INICIAR</Text>
+      </TouchableOpacity>}
+
+      {executando &&<TouchableOpacity style={styles.botao} onPress={() => {
+        if (geradorGrafico) {
+          clearInterval(geradorGrafico)
+          setExecutando(false);
+        }
+      }}> 
+          <Text style={styles.textobotao}>PARAR</Text>
+      </TouchableOpacity>}
       </View>
 
     {/*
