@@ -8,11 +8,22 @@ import { Pagina1 } from './Posição_1';
 import { Pagina2 } from './Posição_2';
 import { Pagina3 } from './Posição_3';
 import { Pagina4 } from './Posição_4';
-
+import { initializeApp } from '@firebase/app';
 
 import { NavegacaoPrincipal } from './navigations';
+import { firebaseConfig } from './config/firebase';
+// import * as firebaseAuth from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function App() {
+
+  const app = initializeApp(firebaseConfig);
+  // const reactNativePersistence = (firebaseAuth as any).getReactNativePersistence;
+
+  // const auth = firebaseAuth.initializeAuth(app, {
+  //   persistence: reactNativePersistence(ReactNativeAsyncStorage)
+  // });
 
 
   return (

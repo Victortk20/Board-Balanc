@@ -1,4 +1,4 @@
-import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity, Alert } from 'react-native';
 
 import logo from  './../pictures/logo.png';
 
@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 import { TextInput } from 'react-native-gesture-handler';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { Formik } from 'formik';
 
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "login">
@@ -15,25 +17,44 @@ export function LoginScreen (props: any) {
 
   const navigation = useNavigation<any>();
 
+  const auth = getAuth();
+
+  const handleLogin = async ({email, senha}:any) => {
+      
+      await signInWithEmailAndPassword(auth, email, senha)
+          .then(usuario => navigation.reset({index: 0, routes: [{name: 'Telaprincipal'}]}))
+          .catch(erro => Alert.alert('Erro', 'Login ou senha incorreta!')); 
+  }
+
+
   return (
     <>
-    <View style={styles.container}>
-        <View style={styles.container2}>
-        <Text style={styles.titulo}>Login</Text>
-        <Image source={logo} style={styles.logo}/> 
-        <Text style={styles.descricao}>Email</Text>
-        <TextInput style={styles.input}  placeholder="Digite seu email" />
-        <Text style={styles.descricao}>Senha</Text>
-        <TextInput style={styles.input}  placeholder="Digite sua senha" />
-        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Telaprincipal')}>
-        <Text style={styles.textobotao}>Entrar</Text>
-      </TouchableOpacity>
-        </View>
-    </View>
-    </>
+      <View style={styles.container}>
 
-    
-    
+      <Formik
+            initialValues={{email:'', senha:''}}
+            onSubmit={handleLogin}
+        >
+            {({handleChange, handleSubmit, isSubmitting}) => (
+                <>
+                    <Text style={styles.titulo}>Login</Text>
+                    <Image source={logo} style={styles.logo}/> 
+        
+                    <Text style={styles.descricao}>Email</Text>
+                    <TextInput  onChangeText={handleChange('email')} style={styles.input}  placeholder="Digite seu email" />
+
+                    <Text style={styles.descricao}>Senha</Text>
+                    <TextInput  onChangeText={handleChange('senha')} style={styles.input}  placeholder="Digite sua senha" />
+
+                    <TouchableOpacity style={styles.botao} onPress={() => handleSubmit()}>
+                    <Text style={styles.textobotao}>Entrar</Text>
+                    </TouchableOpacity>
+                </>
+            )}
+
+        </Formik>
+        </View>
+    </>
   );
 }
 

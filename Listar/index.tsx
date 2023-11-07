@@ -1,4 +1,4 @@
-import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity, FlatList } from 'react-native';
 
 import logo from  './../pictures/logo.png';
 
@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 import { TextInput } from 'react-native-gesture-handler';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "listar">
@@ -14,7 +16,25 @@ export interface BemvindoScreenProps {
 
 export function Listar (props: any) {
 
- const navigation = useNavigation<any>();
+  const navigation = useNavigation<any>();
+  const [ pacientes, setPacientes ] = useState<any[]>();
+  
+  const buscarPacientes = async () => {
+
+    //buscar no firebase
+    setPacientes([
+      {nome: 'João Roberto', uid: '111'},
+      {nome: 'Josefa de Melo', uid: '222'},
+      {nome: 'Chico Buarque', uid: '3333333'},
+    ])
+  }
+
+
+  useEffect(() => {
+    buscarPacientes()
+  }, [])
+
+
 
  return (
     <>
@@ -23,11 +43,18 @@ export function Listar (props: any) {
         <Text style={styles.titulo}>Listar Paciente Cadastrados</Text>
         <Image source={logo} style={styles.logo}/> 
         <Text style={styles.descricao}>Lista de Pacientes:</Text>
-        <Text>1- João Roberto</Text>
-        <Text>1- Josefa de Melo</Text>
-        <Text>1- Chico Buarque</Text>
-        <Text>1- João Roberto</Text>
-        <Text>1- João Roberto</Text>
+        <FlatList
+          data={pacientes}
+          renderItem={({item}) => (
+            <TouchableOpacity onPress={() => {
+              //AsyncStorage.setItem('Paciente', item.uid)
+              navigation.navigate('Telaprincipal');
+            }}>
+              <Text>{item.nome}</Text>
+            </TouchableOpacity>
+            )}
+        />
+        
 
         <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Telaprincipal')}>
         <Text style={styles.textobotao}>Voltar</Text>
