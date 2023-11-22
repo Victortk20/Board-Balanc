@@ -1,4 +1,4 @@
-import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity, Alert } from 'react-native';
 
 import logo from  './../pictures/logo.png';
 
@@ -7,6 +7,11 @@ import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 import { TextInput } from 'react-native-gesture-handler';
 
+import React, { useState } from 'react';
+import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
+import { getFirestore, addDoc, doc, collection } from '@firebase/firestore';
+import { Formik } from 'formik';
+
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "cadastro">
 }
@@ -14,22 +19,68 @@ export interface BemvindoScreenProps {
 
 export function Cadastro (props: any) {
 
- const navigation = useNavigation<any>();
+  const auth = getAuth();
+  const db = getFirestore();
+  const navigation = useNavigation<any>();
+  // ==================================================
+  const handleCadastro = async({nome, cpf}:any) => {
 
- return (
+          addDoc(collection(db, 'usuarios'), {
+              nome, cpf
+          }).then(() => navigation.goBack())
+          .catch(erro => Alert.alert('Erro', 'Não foi possivel criar o usuário, tente novamente'))
+  }
+
+  // ==================================================
+  return (
     <>
     <View style={styles.container}>
+
+
+    <Formik
+            initialValues={{nome:'', cpf:''}}
+            onSubmit={handleCadastro}
+        >
+            {({handleChange, errors, touched, handleBlur, isSubmitting, handleSubmit}) => (
+                <>
+                    <Text  style={styles.titulo}>Cadastro Paciente</Text>
+                    <Image source={logo} style={styles.logo}/> 
+
+                    <Text style={styles.descricao}>Nome</Text>
+                    <TextInput onChangeText={handleChange('nome')} onBlur={handleBlur('nome')}style={styles.input}  placeholder="Digite seu Nome" />
+
+                    <Text  style={styles.descricao}>CPF</Text>
+                    <TextInput onChangeText={handleChange('cpf')} onBlur={handleBlur('cpf')} style={styles.input}  placeholder="Digite sea CPF" />
+
+                    <TouchableOpacity style={styles.botao} onPress={() => handleSubmit()} disabled={isSubmitting}>
+                    <Text style={styles.textobotao}>Cadastrar</Text>
+                    </TouchableOpacity>
+                </>
+            )}
+
+        </Formik>
+
+    
+                        
+
+
+      {/* 
         <View style={styles.container2}>
         <Text style={styles.titulo}>Cadastro Paciente</Text>
         <Image source={logo} style={styles.logo}/> 
+
         <Text style={styles.descricao}>Nome</Text>
         <TextInput style={styles.input}  placeholder="Digite seu Nome" />
+
         <Text style={styles.descricao}>CPF</Text>
         <TextInput style={styles.input}  placeholder="Digite sua CPF" />
+
         <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Telaprincipal')}>
         <Text style={styles.textobotao}>Cadastrar</Text>
-      </TouchableOpacity>
-        </View>
+        </TouchableOpacity> 
+
+        </View>*/}
+
     </View>
     </>
 

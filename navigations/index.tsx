@@ -10,11 +10,13 @@ import { Pagina3 } from './../Posição_3';
 import { Pagina4 } from './../Posição_4';
 import { Cadastro } from '../cadastro';
 import { Listar } from '../Listar';
+import { Telaprincipal2 } from '../telaprincipal2';
 
 export type NavegacaoPrincipalParams = {
     bemvindo: undefined,
     login:undefined,
     Telaprincipal:undefined,
+    Telaprincipal2:undefined,
     Pagina1:undefined,
     Pagina2: undefined,
     Pagina3: undefined,
@@ -35,6 +37,7 @@ export const NavegacaoPrincipal = () => (
             <Stack.Screen name="cadastro" component={Cadastro} />
             <Stack.Screen name="listar" component={Listar} />
             <Stack.Screen name="Telaprincipal" component={Telaprincipal} />
+            <Stack.Screen name="Telaprincipal2" component={Telaprincipal2} />
             <Stack.Screen name="Pagina1" component={Pagina1} />
             <Stack.Screen name="Pagina2" component={Pagina2} />
             <Stack.Screen name="Pagina3" component={Pagina3} />

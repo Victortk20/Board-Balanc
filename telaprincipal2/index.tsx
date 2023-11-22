@@ -6,13 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 
-
-
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "bemvindo">
 }
 
-export function Telaprincipal (props: any) {
+export function Telaprincipal2 (props: any) {
 
   const navigation = useNavigation<any>();
 
@@ -23,13 +21,21 @@ export function Telaprincipal (props: any) {
     <View style={styles.container2}>
       <Image source={logo} style={styles.logo}/> 
       <>
-
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('cadastro')}>
-        <Text style={styles.textobotao}>Cadastro</Text>
+      <Text style={styles.titulo}> Escolha Qual Teste sera feito ?</Text>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina1')}>
+        <Text style={styles.textobotao}>Olhos Abertos</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Telaprincipal2')}>
-        <Text style={styles.textobotao}>Listar Paciente</Text>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina2')}>
+        <Text style={styles.textobotao}>Olhos Fechados</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina3')}>
+        <Text style={styles.textobotao}>Olhos Abertos sobre superfície instável</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina4')}>
+        <Text style={styles.textobotao}>olhos fechados sobre superfície instável</Text>
       </TouchableOpacity>
 
       </>
