@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "courageous-soda",
-    "slug": "snack-a137fb5e-99a2-4666-a0b7-32a51800b8c0",
+    "name": "jv-bluetooth",
+    "slug": "jv-bluetooth",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -52,7 +52,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "d6617e09-ee2b-495a-87b7-f68db6142c95"
+        "projectId": "0e35db17-adac-438b-a623-e71ad7aaa381"
       }
     }
   }
