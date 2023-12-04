@@ -11,6 +11,9 @@ import React, { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
 import { getFirestore, addDoc, doc, collection } from '@firebase/firestore';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
+import TextInputMask from 'react-native-mask-input';
+import { ActivityIndicator } from 'react-native-paper';
 
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "cadastro">
@@ -25,7 +28,7 @@ export function Cadastro (props: any) {
   // ==================================================
   const handleCadastro = async({nome, cpf}:any) => {
 
-          addDoc(collection(db, 'usuarios'), {
+          await addDoc(collection(db, 'usuarios'), {
               nome, cpf
           }).then(() => navigation.goBack())
           .catch(erro => Alert.alert('Erro', 'Não foi possivel criar o usuário, tente novamente'))
@@ -39,22 +42,29 @@ export function Cadastro (props: any) {
 
     <Formik
             initialValues={{nome:'', cpf:''}}
+            validationSchema={Yup.object().shape({
+              nome: Yup.string().required('Campo nome é obrigatório'),
+              cpf: Yup.string().required('O campo cpf é obrigatório').length(14, 'O campo precisa estar completo!')
+            })}
             onSubmit={handleCadastro}
         >
-            {({handleChange, errors, touched, handleBlur, isSubmitting, handleSubmit}) => (
+            {({handleChange, values, errors, touched, handleBlur, isSubmitting, handleSubmit}) => (
                 <>
                     <Text  style={styles.titulo}>Cadastro Paciente</Text>
                     <Image source={logo} style={styles.logo}/> 
 
                     <Text style={styles.descricao}>Nome</Text>
                     <TextInput onChangeText={handleChange('nome')} onBlur={handleBlur('nome')}style={styles.input}  placeholder="Digite seu Nome" />
+                    { touched.nome && errors.nome && <Text style={{textAlign: 'right', color: 'red'}}>{errors.nome}</Text>}
 
                     <Text  style={styles.descricao}>CPF</Text>
-                    <TextInput onChangeText={handleChange('cpf')} onBlur={handleBlur('cpf')} style={styles.input}  placeholder="Digite sea CPF" />
+                    <TextInputMask mask={ [/\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, "-", /\d/, /\d/]} value={values.cpf} onChangeText={handleChange('cpf')} onBlur={handleBlur('cpf')} style={styles.input}  placeholder="Digite sea CPF" />
+                    { touched.cpf && errors.cpf && <Text style={{textAlign: 'right', color: 'red'}}>{errors.cpf}</Text>}
 
-                    <TouchableOpacity style={styles.botao} onPress={() => handleSubmit()} disabled={isSubmitting}>
+                    { isSubmitting && <ActivityIndicator size={30} />}
+                    { !isSubmitting && <TouchableOpacity style={styles.botao} onPress={() => handleSubmit()} disabled={isSubmitting}>
                     <Text style={styles.textobotao}>Cadastrar</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </>
             )}
 

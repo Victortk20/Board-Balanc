@@ -44,7 +44,7 @@ export function LoginScreen (props: any) {
                     <TextInput  onChangeText={handleChange('email')} style={styles.input}  placeholder="Digite seu email" />
 
                     <Text style={styles.descricao}>Senha</Text>
-                    <TextInput  onChangeText={handleChange('senha')} style={styles.input}  placeholder="Digite sua senha" />
+                    <TextInput  onChangeText={handleChange('senha')} secureTextEntry={true} style={styles.input}  placeholder="Digite sua senha" />
 
                     <TouchableOpacity style={styles.botao} onPress={() => handleSubmit()}>
                     <Text style={styles.textobotao}>Entrar</Text>
