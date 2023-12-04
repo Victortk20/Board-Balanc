@@ -1,4 +1,4 @@
-import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity, ScrollView } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity, ScrollView, ActivityIndicator} from 'react-native';
 
 import logo from  './../pictures/logo.png';
 
@@ -13,6 +13,8 @@ import RNBluetoothClassic, {
 
 import React, { useState, useEffect } from 'react';
 import Grafico from '../components/Grafico';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { usePacienteContext } from '../provider/paciente-context';
 
 
 export interface BemvindoScreenProps {
@@ -28,16 +30,21 @@ export  function Exame (props: BemvindoScreenProps) {
   const [ z, setZ ] = useState<number|null>(null);
   const [ geradorGrafico, setGeradorGrafico ] = useState<any>(null);
   const [ executando, setExecutando ] = useState(false);
-  const tipoExame = props.route.params.tipo;
-
+  const [ status, setStatus ] = useState<'Parado'|'Calibrando'|'Executando'|'Finalizado'>('Parado');
+  const [ tempoExame, setTempoExame ] = useState(0);
+  const db = getFirestore();
+  const { paciente } = usePacienteContext();
+  const  [ salvandoExame, setSalvandoExame ] = useState(false);
   
   const deviceAddress = '00:21:13:03:1B:4A'; // Substitua pelo endereço do dispositivo que você deseja verificar
-  const [isConnected, setIsConnected] = useState<boolean>(false);
   const delaySegundos = 5;
   // ======================================================================
   const checkDeviceConnection = async () => {
     try {
       setExecutando(true);
+      setTempoExame(0);
+      setPoints([]); //Reseta
+      setStatus('Calibrando')
       console.log('AAAA');
       //Solicita permissão
       const granted = await PermissionsAndroid.request(
@@ -58,6 +65,7 @@ export  function Exame (props: BemvindoScreenProps) {
         let device = await RNBluetoothClassic.connectToDevice(deviceAddress);  // Returns BlutoothDevice
         let calibrou = false;
         let inicial = {}
+        let tempo = 0;
         if (await device.isConnected()) {
           const interval = setInterval(async () => {
             let dados:any = await device.read();
@@ -79,7 +87,7 @@ export  function Exame (props: BemvindoScreenProps) {
               console.log(x, y, z);
               inicial = {x, y, z}
             } else {
-  
+              setStatus('Executando')
               //ajuste de sensibilidade
               const sensibilidade = 3;
               console.log('Dados');
@@ -99,6 +107,8 @@ export  function Exame (props: BemvindoScreenProps) {
               setX(x);
               setY(y);
               setZ(z);
+              tempo += delaySegundos;
+              setTempoExame(tempo);
             }
 
            
@@ -122,6 +132,20 @@ export  function Exame (props: BemvindoScreenProps) {
     }
   }
   // =========
+  const salvarExame = async () => {
+    setSalvandoExame(true);
+    //Informações salvas no exame
+    await addDoc(collection(db, 'exames'), {
+      paciente,
+      cpf: paciente.cpf,
+      tipo: props.route.params?.tipo,
+      posicoes: points,
+      tempoExame
+    })
+    setSalvandoExame(false);
+    navigation.goBack();
+  }
+  // =========
   useEffect(() => {
     if (y != null && executando) {
       const newPoints = [...points];
@@ -133,46 +157,44 @@ export  function Exame (props: BemvindoScreenProps) {
   // =======================================================
   return (
     <ScrollView>
-      <View style={styles.container}>
+
+    <View style={styles.container}>
+          {/* GRAFICO */}
           <Text style={styles.titulo}>{TipoExame(props.route.params?.tipo)}</Text>
           <View style={styles.container2}>
-          <Text>Grafico 1</Text>
-          <Grafico points={points}/>
-      </View >
+             <Text>Grafico 1</Text>
+             <Grafico points={points}/>
+          </View >
       
-      <Text style={styles.subtitulo}>Resultado:</Text>
-      <Text style={styles.subtitulo}>Média:</Text>
-      <Text style={styles.subtitulo}>Tempo do Teste:</Text>
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.goBack()}>
-          <Text style={styles.textobotao}>Voltar</Text>
-      </TouchableOpacity>
+          {/* OPÇÕES */}
+          {!salvandoExame && 
+          <>
+            <Text style={styles.subtitulo}>Tempo do Teste: {"\n"} {tempoExame} segundos</Text>
+            <Text style={styles.subtitulo}>Status: {status}</Text>
+            <TouchableOpacity style={styles.botao} onPress={() => navigation.goBack()}>
+                <Text style={styles.textobotao}>Voltar</Text>
+            </TouchableOpacity>
 
-      {!executando && <TouchableOpacity style={styles.botao} onPress={checkDeviceConnection}>
-          <Text style={styles.textobotao}>INICIAR</Text>
-      </TouchableOpacity>}
+            {!executando && <TouchableOpacity style={styles.botao} onPress={checkDeviceConnection}>
+            <Text style={styles.textobotao}>{status == 'Parado' ? 'INICIAR' : 'REINICIAR'}</Text>
+            </TouchableOpacity>}
 
-      {executando &&<TouchableOpacity style={styles.botao} onPress={() => {
-        if (geradorGrafico) {
-          clearInterval(geradorGrafico)
-          setExecutando(false);
-        }
-      }}> 
-          <Text style={styles.textobotao}>PARAR</Text>
-      </TouchableOpacity>}
+            {status == 'Finalizado' && <TouchableOpacity style={styles.botao} onPress={salvarExame}>
+                <Text style={styles.textobotao}>Salvar Exame</Text>
+            </TouchableOpacity>}
+
+            {executando &&<TouchableOpacity style={styles.botao} onPress={() => {
+              if (geradorGrafico) {
+                clearInterval(geradorGrafico)
+                setExecutando(false);
+                setStatus('Finalizado');
+              }
+            }}> 
+            <Text style={styles.textobotao}>PARAR</Text>
+            </TouchableOpacity>}
+          </>}
+          {salvandoExame && <ActivityIndicator size={50} />}
       </View>
-
-    {/*
-    <View>
-      <Text>Estado da conexão Bluetooth: {isConnected ? 'Conectado' : 'Desconectado'}</Text>
-      <Button
-        title="Verificar Conexão Bluetooth"
-        onPress={() => {
-          checkDeviceConnection();
-        }}
-      />
-    </View>
-*/}
-
     </ScrollView>
     
   );
@@ -186,10 +208,9 @@ const styles = StyleSheet.create({
     backgroundColor:'#87ab7d',
     paddingHorizontal: 100,
     paddingVertical: 30
-    
-},
+  },
   container2: {
-
+    
     justifyContent: 'center',
     backgroundColor:'#b1e3a3',
     borderRadius: 15,
@@ -224,7 +245,7 @@ const styles = StyleSheet.create({
 
   subtitulo:{
     color: '#000000',
-    fontSize: 20,
+    fontSize: 14,
     textAlign: 'center',
     padding: 5,
 },

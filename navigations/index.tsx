@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BemvindoScreen } from './../bem-vindo';
 import { LoginScreen } from '../login';
 import { Telaprincipal } from './../tela_principal';
-import { Exame } from '../Posicao';
+import { Exame } from '../Exame';
 import { Cadastro } from '../cadastro';
 import { Listar } from '../Listar';
 import { Telaprincipal2 } from '../telaprincipal2';
