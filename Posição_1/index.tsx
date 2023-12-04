@@ -1,4 +1,4 @@
-import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, ViewBase, View,Image,TouchableOpacity, ScrollView } from 'react-native';
 
 import logo from  './../pictures/logo.png';
 
@@ -138,7 +138,7 @@ export  function Pagina1 (props: any) {
 
   
   return (
-    <>
+    <ScrollView>
       <View style={styles.container}>
           <Text style={styles.titulo}>Posição 1</Text>
           <View style={styles.container2}>
@@ -179,7 +179,7 @@ export  function Pagina1 (props: any) {
     </View>
 */}
 
-    </>
+    </ScrollView>
     
   );
 }
@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor:'#87ab7d',
-    padding: 100,
+    paddingHorizontal: 100,
+    paddingVertical: 30
     
 },
   container2: {

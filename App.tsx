@@ -17,6 +17,7 @@ import * as firebaseAuth from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import {  initializeAuth, getReactNativePersistence } from '@firebase/auth/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PatienteProvider from './provider/paciente-context';
 
 
 export default function App() {
@@ -31,9 +32,9 @@ export default function App() {
   //  });
 
   return (
-    <>
-    <NavegacaoPrincipal/>
-    </>
+    <PatienteProvider>
+      <NavegacaoPrincipal/>
+    </PatienteProvider>
     
   );
 }

@@ -28,7 +28,7 @@ export function Telaprincipal (props: any) {
         <Text style={styles.textobotao}>Cadastro</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Telaprincipal2')}>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('listar')}>
         <Text style={styles.textobotao}>Listar Paciente</Text>
       </TouchableOpacity>
 

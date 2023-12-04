@@ -5,6 +5,7 @@ import logo from  './../pictures/logo.png';
 import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
+import { usePacienteContext } from '../provider/paciente-context';
 
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "bemvindo">
@@ -12,15 +13,24 @@ export interface BemvindoScreenProps {
 
 export function Telaprincipal2 (props: any) {
 
-  const navigation = useNavigation<any>();
 
+
+  const navigation = useNavigation<any>();
+  const { paciente }  = usePacienteContext();
+  // =====================================================
   return (
     <>
     
     <View style={styles.container}>
     <View style={styles.container2}>
+
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.goBack()}>
+        <Text style={styles.textobotao}>Voltar a seleção de pacientes</Text>
+      </TouchableOpacity>
       <Image source={logo} style={styles.logo}/> 
       <>
+      <Text style={{textAlign:'center'}}>Paciente: {paciente.nome} ({paciente.cpf})</Text>
+
       <Text style={styles.titulo}> Escolha Qual Teste sera feito ?</Text>
       <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina1')}>
         <Text style={styles.textobotao}>Olhos Abertos</Text>
