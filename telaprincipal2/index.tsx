@@ -48,6 +48,10 @@ export function Telaprincipal2 (props: any) {
       <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Exame', {tipo: 'fechado_superficie'})}>
         <Text style={styles.textobotao}>olhos fechados sobre superfície instável</Text>
       </TouchableOpacity>
+      
+      <TouchableOpacity style={[styles.botao, {backgroundColor: '#ebed17'}]} onPress={() => navigation.navigate('listarExames')}>
+        <Text style={[styles.textobotao, {color:'#696d4a'}]}>Consultar exames exames</Text>
+      </TouchableOpacity>
 
       </>
     </View>

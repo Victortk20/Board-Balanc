@@ -15,6 +15,7 @@ import React, { useState, useEffect } from 'react';
 import Grafico from '../components/Grafico';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { usePacienteContext } from '../provider/paciente-context';
+import { TipoExame } from '../helpers/exame';
 
 
 export interface BemvindoScreenProps {
@@ -123,15 +124,6 @@ export  function Exame (props: BemvindoScreenProps) {
     }
   };
   // =========
-  const TipoExame = (tipo) => {
-    switch(tipo) {
-      case 'aberto': return 'Olhos Abertos';
-      case 'aberto_superficie': return 'Olhos Abertos sobre superfície instável';
-      case 'fechado': return 'Olhos Fechados';
-      case 'fechado_superficie': return 'Olhos Fechados sobre superfície instável';
-    }
-  }
-  // =========
   const salvarExame = async () => {
     setSalvandoExame(true);
     //Informações salvas no exame
@@ -156,7 +148,7 @@ export  function Exame (props: BemvindoScreenProps) {
   }, [y])
   // =======================================================
   return (
-    <ScrollView>
+    <ScrollView style={{flex: 1, backgroundColor: '#87ab7d'}}>
 
     <View style={styles.container}>
           {/* GRAFICO */}
@@ -193,7 +185,7 @@ export  function Exame (props: BemvindoScreenProps) {
             <Text style={styles.textobotao}>PARAR</Text>
             </TouchableOpacity>}
           </>}
-          {salvandoExame && <ActivityIndicator size={50} />}
+          {salvandoExame && <ActivityIndicator size={50} style={{marginTop: 20}}/>}
       </View>
     </ScrollView>
     

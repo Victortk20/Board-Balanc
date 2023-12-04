@@ -18,6 +18,7 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import {  initializeAuth, getReactNativePersistence } from '@firebase/auth/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PatienteProvider from './provider/paciente-context';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
 
   return (
     <PatienteProvider>
+      <StatusBar />
       <NavegacaoPrincipal/>
     </PatienteProvider>
     

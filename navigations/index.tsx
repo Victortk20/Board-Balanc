@@ -6,8 +6,10 @@ import { LoginScreen } from '../login';
 import { Telaprincipal } from './../tela_principal';
 import { Exame } from '../Exame';
 import { Cadastro } from '../cadastro';
-import { Listar } from '../Listar';
+import { Listar } from '../ListarPacientes';
 import { Telaprincipal2 } from '../telaprincipal2';
+import { ListarExames } from '../ListarExames';
+import { ExibirExames } from '../ExibirExame';
 
 export type NavegacaoPrincipalParams = {
     bemvindo: undefined,
@@ -17,6 +19,8 @@ export type NavegacaoPrincipalParams = {
     Exame:{tipo: 'aberto'|'fechado'|'aberto_superficie'|'fechado_superficie'},
     cadastro: undefined,
     listar: undefined,
+    listarExames: undefined,
+    exibirExame: {exame: {cpf:string, paciente: {cpf:string, nome: string}, posicoes: {x:number, y:number}[], tempoExame: number, tipo: string}}
   
     
 }
@@ -33,6 +37,8 @@ export const NavegacaoPrincipal = () => (
             <Stack.Screen name="Telaprincipal" component={Telaprincipal} />
             <Stack.Screen name="Telaprincipal2" component={Telaprincipal2} />
             <Stack.Screen name="Exame" component={Exame} />
+            <Stack.Screen name="listarExames" component={ListarExames} />
+            <Stack.Screen name="exibirExame" component={ExibirExames} />
         </Stack.Navigator>
     </NavigationContainer>
 )
