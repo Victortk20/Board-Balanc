@@ -4,10 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BemvindoScreen } from './../bem-vindo';
 import { LoginScreen } from '../login';
 import { Telaprincipal } from './../tela_principal';
-import { Pagina1 } from './../Posição_1';
-import { Pagina2 } from './../Posição_2';
-import { Pagina3 } from './../Posição_3';
-import { Pagina4 } from './../Posição_4';
+import { Exame } from '../Posicao';
 import { Cadastro } from '../cadastro';
 import { Listar } from '../Listar';
 import { Telaprincipal2 } from '../telaprincipal2';
@@ -17,10 +14,7 @@ export type NavegacaoPrincipalParams = {
     login:undefined,
     Telaprincipal:undefined,
     Telaprincipal2:undefined,
-    Pagina1:undefined,
-    Pagina2: undefined,
-    Pagina3: undefined,
-    Pagina4: undefined,
+    Exame:{tipo: 'aberto'|'fechado'|'aberto_superficie'|'fechado_superficie'},
     cadastro: undefined,
     listar: undefined,
   
@@ -38,12 +32,7 @@ export const NavegacaoPrincipal = () => (
             <Stack.Screen name="listar" component={Listar} />
             <Stack.Screen name="Telaprincipal" component={Telaprincipal} />
             <Stack.Screen name="Telaprincipal2" component={Telaprincipal2} />
-            <Stack.Screen name="Pagina1" component={Pagina1} />
-            <Stack.Screen name="Pagina2" component={Pagina2} />
-            <Stack.Screen name="Pagina3" component={Pagina3} />
-            <Stack.Screen name="Pagina4" component={Pagina4} />
-            
-            
+            <Stack.Screen name="Exame" component={Exame} />
         </Stack.Navigator>
     </NavigationContainer>
 )

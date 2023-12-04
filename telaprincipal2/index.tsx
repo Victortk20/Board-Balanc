@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { NavegacaoPrincipalParams } from '../navigations';
 import { usePacienteContext } from '../provider/paciente-context';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export interface BemvindoScreenProps {
   route: RouteProp<NavegacaoPrincipalParams, "bemvindo">
@@ -15,7 +16,7 @@ export function Telaprincipal2 (props: any) {
 
 
 
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<StackNavigationProp<NavegacaoPrincipalParams, 'Exame'>>();
   const { paciente }  = usePacienteContext();
   // =====================================================
   return (
@@ -32,19 +33,19 @@ export function Telaprincipal2 (props: any) {
       <Text style={{textAlign:'center'}}>Paciente: {paciente.nome} ({paciente.cpf})</Text>
 
       <Text style={styles.titulo}> Escolha Qual Teste sera feito ?</Text>
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina1')}>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Exame', {tipo: 'aberto'})}>
         <Text style={styles.textobotao}>Olhos Abertos</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina2')}>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Exame', {tipo: 'fechado'})}>
         <Text style={styles.textobotao}>Olhos Fechados</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina3')}>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Exame', {tipo: 'aberto_superficie'})}>
         <Text style={styles.textobotao}>Olhos Abertos sobre superfície instável</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Pagina4')}>
+      <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Exame', {tipo: 'fechado_superficie'})}>
         <Text style={styles.textobotao}>olhos fechados sobre superfície instável</Text>
       </TouchableOpacity>
 
