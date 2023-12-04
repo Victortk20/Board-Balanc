@@ -22,7 +22,7 @@ export function ExibirExames (props: BemvindoScreenProps) {
     const { paciente } = usePacienteContext();
     // =======================================================
     return (
-        <ScrollView>
+        <ScrollView style={{flex: 1, backgroundColor: '#87ab7d'}}>
 
         <View style={styles.container}>
 
